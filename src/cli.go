@@ -1,21 +1,32 @@
 package main
 
-import(
-	"os"
+import (
 	"errors"
+	"os"
 )
 
 // find the command the user wants to run
-func getCommand() (string, error) {
+func getCommand(num int) (string, error) {
 	args := os.Args
 
-	if len(args) <= 1 {
+	if len(args) <= num {
 		return "", errors.New("No command")
 	} else {
-		command := args[1]
-		if command == "add" || command == "visual"{
+		command := args[num]
+		if (num == 1 &&
+		(command == "add" || 
+		command == "visual" ||
+		command == "group" ||
+		command == "switch" ||
+		command == "init")) {
 			return command, nil
-		} else{
+		} else if(num == 2 &&
+		(command == "add" || 
+		command == "delete")){
+			return command, nil
+		}else if(num == 3){
+			return command,nil
+		}else{
 			return "", errors.New("Invalid command")
 		}
 	}
@@ -31,3 +42,4 @@ func getFilepaths() ([]string, error) {
 		return args[2:], nil
 	}
 }
+
