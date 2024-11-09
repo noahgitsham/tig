@@ -6,30 +6,33 @@ import (
     "path/filepath"
 )
 
-func getCurrentDir() string {
-	currentDirectory, err := os.Getwd()
-	if (err != nil) {
-		panic(err)
-	}
-	return currentDirectory
-}
-
-func dirNotExists(path string) bool {
-	_, err := os.Stat(path)
-	return errors.Is(err, os.ErrNotExist)
-}
-
-// Finds base directory ()
-func findGitDir(path string) string {
-	for (dirNotExists(filepath.Join(path, ".git")) && path != "/") {
-		path = filepath.Dir(path)
-	} 
-	if (path == "/") {
-		return ""
-	}
-	return path
-}
-
 func getHeadCommit() string {
-	return "0"
+	return find
+}
+
+func findGitDir(path string) (string, err) {
+	file, err := findBaseDir(path)
+	if (err != nil) {
+		return err
+	}
+	return filepath.Join(file, ".git")
+}
+
+func findTigDir(path string) (string, err) {
+	file, err := findBaseDir(path)
+	if (err != nil) {
+		return err
+	}
+	return filepath.Join(file, ".tig")
+}
+
+func getPublicLinks(path string) (string, err) {
+	file, err := findTigDir(path)
+	if (err != nil) {
+		return err
+	}
+	for _, file := range filepath.Join(file, "links", "public") {
+        fmt.Println(file.Name(), file.IsDir())
+    }
+	return 
 }
