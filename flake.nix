@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Tig flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -14,10 +14,8 @@
       buildInputs = with pkgs; [  ] ++ common-deps;
     };
 
-    packages.x86_64-linux.tig-cli = pkgs.buildGoPackage {
+    packages.x86_64-linux.tig = pkgs.buildGoPackage {
       goDeps = with pkgs; [  ] ++ common-deps;
     };
-
-    packages.x86_64-linux.tig-server = self.packages.x86_64-linux.hello;
   };
 }
