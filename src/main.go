@@ -13,7 +13,7 @@ func main() {
 		filepaths, err := getFilepaths()
 		check(err)
 		// add filepaths to links
-		fmt.Println(filepaths)
+		addLinks(filepaths)
 	} else if argument == "visual" {
 		// launch visualisation
 		fmt.Println("VISUALISE")
