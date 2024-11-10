@@ -14,6 +14,7 @@ import (
 func visualise() {
 	r := gin.Default()
 	r.Static("/static", "./static")
+	r.Static("/images", "./media")
 	r.LoadHTMLGlob("static/*")
 	r.GET("/", func(c *gin.Context) {
 		// c.JSON(200, gin.H{
@@ -26,7 +27,7 @@ func visualise() {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title":   "Tig",
 			"content": "visualise your repository",
-			"commitInfo": tree,
+			"commitInfo":tree,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
@@ -154,7 +155,6 @@ func parseGitLog() (string, error) {
 		return "", err
 	}
 	// Iterate over commits, and add them as child to their parent nodes
-	// SEEMS TO WORK
 	for _, commit := range commits {
 		child := commitMap[commit]
 		temp := commitMap[child.parentHash]
@@ -205,8 +205,6 @@ func parseGitLog() (string, error) {
 		}
 	}
 
-	fmt.Println(len(stackList))
-
 
 	// BIGGEST MONEY EVER
 	commits, err = getCommitsChronological()
@@ -219,6 +217,7 @@ func parseGitLog() (string, error) {
 		for index, stack := range stackList {
 			if slices.Contains(stack, commit) {
 				if stack[len(stack) - 1] == commit {
+<<<<<<< HEAD
 					outputString += "  branch b" + strconv.Itoa(index) + "\n"
 				}
 				outputString += "  checkout b" + strconv.Itoa(index) + "\n"
