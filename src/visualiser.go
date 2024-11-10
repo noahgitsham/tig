@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strconv"
 	"net/http"
+	"fmt"
 )
 
 func visualise() {
@@ -18,9 +19,14 @@ func visualise() {
 		// c.JSON(200, gin.H{
 		// 	"message": "pong",
 		// })
+		tree, err := parseGitLog()
+		check(err)
+		fmt.Println(tree)
+		
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title":   "Tig",
 			"content": "visualise your repository",
+			"commitInfo":tree,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080

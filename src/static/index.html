@@ -15,24 +15,12 @@
     </header>
     <main>
         <p>{{ .content }}</p>
+        
     </main>
     <div class="flex-container" style="display: flex; flex-direction: row;">
         <div>
             <pre class="mermaid">
-                gitGraph BT:
-                commit id: "first"
-                commit id: "second"
-                branch develop
-                checkout develop
-                commit
-                checkout main
-                commit
-                checkout develop
-                commit
-                checkout main
-                merge develop
-                commit
-                commit
+                {{.commitInfo}}
             </pre>
         </div>
         <div id="imageBox" class="image-box" style="display: none;" data-info="This is some extra information" >
@@ -59,13 +47,11 @@
         
                 // Try to select the first element with class 'first'
                 
-                var element2 = document.getElementsByClassName('second')[0];
                 var nodeList = document.getElementsByClassName("commit");
-                console.log(nodeList);
                 Array.from(nodeList).forEach(node => {
                  // Convert classList to array and log it
                 var classes = node.classList
-                console.log(classes[1]);
+                
                 if (classes[1]=="commit-merge"){
                     trackNode(classes[2])
                 }else {
@@ -78,7 +64,7 @@
                     
                     // Check if element exists
                     if (element) {
-                        console.log("Element found:", element);
+                        
                         
                         // Add hover event listener
                         element.addEventListener('mouseover', () => {
