@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}jflkdajlkfdja</title>
+    <!-- <link rel="stylesheet" href="/static/styles.css"> -->
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    
+</head>
+<body>
+    <header>
+        <h1 id = "this">{{ .title }}</h1>
+       
+    </header>
+    <main>
+        <p>{{ .content }}</p>
+    </main>
+    <div class="flex-container" style="display: flex; flex-direction: row;">
+        <div>
+            <pre class="mermaid">
+                gitGraph BT:
+                commit id: "first"
+                commit id: "second"
+                branch develop
+                checkout develop
+                commit
+                checkout main
+                commit
+                checkout develop
+                commit
+                checkout main
+                merge develop
+                commit
+                commit
+            </pre>
+        </div>
+        <div id="imageBox" class="image-box" style="display: none;" data-info="This is some extra information" >
+            <img src="https://via.placeholder.com/150" alt="Sample Image" >
+        </div>
+    </div>
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({ startOnLoad: true });
+        
+            // Define the sleep function
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        
+            demo();
+        
+            async function demo() {
+                console.log("Start");
+        
+                // Sleep for 2 seconds
+                await sleep(2000);
+                //console.log("2 seconds later");
+        
+                // Try to select the first element with class 'first'
+                
+                var element2 = document.getElementsByClassName('second')[0];
+                var nodeList = document.getElementsByClassName("commit");
+                console.log(nodeList);
+                Array.from(nodeList).forEach(node => {
+                 // Convert classList to array and log it
+                var classes = node.classList
+                console.log(classes[1]);
+                if (classes[1]=="commit-merge"){
+                    trackNode(classes[2])
+                }else {
+                    trackNode(classes[1])
+                }
+                });
+                function trackNode(name){
+                    var element = document.getElementsByClassName(name)[0];
+                    const imageBox = document.getElementById('imageBox');
+                    
+                    // Check if element exists
+                    if (element) {
+                        console.log("Element found:", element);
+                        
+                        // Add hover event listener
+                        element.addEventListener('mouseover', () => {
+                            // Check if the element is an SVG element (for using 'fill' property)
+                            if (element instanceof SVGElement) {
+                                element.style.fill = "red"; // Change color on hover
+                            } else {
+                                element.style.backgroundColor = "red"; // Change background color for non-SVG elements
+                            }
+                        });
+                        element.addEventListener('mouseleave', () => {
+                        element.style.fill = "yellow"; // Reset the background color when mouse leaves
+                        });
+                        // element.addEventListener('mouseenter', (event) => showImageBox(event, "nothing"));
+                        
+                        // element.addEventListener('mouseleave', hideImageBox);
+                        element.addEventListener('click', (event) => {
+                        if (imageBox.style.display === 'none') {
+                            showImageBox(event, "none",name);  // Example image URL
+                        } else if (imageBox.dataset.info!=name){
+                            showImageBox(event, "none",name); 
+                        }
+                        else {
+                            hideImageBox();
+                        }
+                    });
+                        // Optionally, show an alert with the element
+                        //alert(element);
+                    } else {
+                        console.log("No element with the class 'first' found.");
+                    }
+            
+                    // Sleep for 1 more second
+                    console.log("3 seconds later");
+                    // Get all the elements with class 'targetElement'
+                    // Function to show the image box above the target element
+                    function showImageBox(event,imageLink,name) {
+                        // Get the position of the target element
+                        //const rect = event.target.getBoundingClientRect();
+
+                        // Set the position of the image box to be above the target element
+                        //imageBox.style.left = `${rect.right + 5 + window.scrollX}px`;  // Horizontal position to the right
+                        //imageBox.style.top = `${rect.top + window.scrollY}px`;
+                        //imageBox.style.left = `${rect.right + 10 + window.scrollX}px`;  // Position 10px to the right of the element
+                        //imageBox.style.top = `${rect.top + window.scrollY}px`;
+
+                        // Display the image box
+                        imageBox.style.display = 'block';
+                        imageBox.dataset.info = name
+                        console.log(imageBox.dataset.info);
+                        imageBox.src = imageLink;
+                    }
+
+                    // Function to hide the image box
+                    function hideImageBox() {
+                        imageBox.style.display = 'none';
+                    }
+                    // Add event listeners to each target element
+                }
+            }
+        </script>
+        
+   
+</body>
+</html>
