@@ -6,5 +6,5 @@ import(
 
 func main() {
     fmt.Println("Hello, World!")
-	fmt.Println(findGitDir(getCurrentDir()))
+	fmt.Println(parseGitLog())
 }
