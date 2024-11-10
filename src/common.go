@@ -6,11 +6,15 @@ import (
 	"path/filepath"
 )
 
-func getCurrentDir() string {
-	currentDirectory, err := os.Getwd()
-	if err != nil {
+func check(err error){
+	if err != nil{
 		panic(err)
 	}
+}
+
+func getCurrentDir() string {
+	currentDirectory, err := os.Getwd()
+	check(err)
 	return currentDirectory
 }
 
@@ -34,52 +38,38 @@ func getHeadCommit() string {
 	return "0"
 }
 
-func tigInit() error {
+func tigInit() {
 	err := os.Mkdir(".tig", 0755)
-	if err != nil {
-		return err
-	} else {
-		err = os.Mkdir(".tig/public", 0755)
-		if err != nil {
-			return err
-		}
-		err = os.Mkdir(".tig/private", 0755)
-		if err != nil {
-			return err
-		}
-		file, err := os.Create(".tig/public/default")
-		if err != nil {
-			return err
-		} else {
-			file.Close()
-		}
-		file, err = os.Create(".tig/HEAD")
-		if err != nil {
-			return err
-		} else {
-			_, err := file.WriteString("./public/default")
-			if err != nil {
-				return err
-			}
-			file.Close()
-		}
-	}
-	return nil
+	check(err)
+	err = os.Mkdir(".tig/public", 0755)
+	check(err)	
+	err = os.Mkdir(".tig/private", 0755)
+	check(err)	
+	file, err := os.Create(".tig/public/default")
+	check(err)		
+	file.Close()
+	file, err = os.Create(".tig/HEAD")
+	check(err)
+	_, err = file.WriteString("./public/default")
+	check(err)
+	file.Close()
 }
 
-func addGroup(name string) error {
-	file, err := os.Create(".tig/public/"+name)
-	if err != nil {
-		return err
-	} else {
-		file.Close()
-	}
-	return nil
+func addGroup(name string, visibility string) {
+	file, err := os.Create(".tig/"+visibility+"/"+name)
+	check(err)	
+	file.Close()
 }
-func deleteGroup(name string) error {
-	err := os.Remove((".tig/public/" + name))
-	if err != nil {
-		return err
-	}
-	return nil
+
+func deleteGroup(name string, visibility string) {
+	err := os.Remove((".tig/"+visibility+"/" + name))
+	check(err)
+}
+
+func switchGroup(name string, visibility string) {
+	file, err := os.Create(".tig/HEAD")
+	check(err)
+	_, err = file.WriteString("./"+visibility+"/"+name)
+	check(err)
+	file.Close()
 }

@@ -5,46 +5,42 @@ import (
 )
 
 func main() {
-	// find command argument
-	command, err := getCommand(1)
-	if err != nil {
-		panic(err)
-	} else if command == "add" {
+	// find argument at position 1
+	argument, err := getArgument(1)
+	check(err)
+	if argument == "add" {
 		// find filepaths argument
 		filepaths, err := getFilepaths()
-		if err != nil {
-			panic(err)
-		} else {
-			// add filepaths to links
-			fmt.Println(filepaths)
-		}
-	} else if command == "visual" {
+		check(err)
+		// add filepaths to links
+		fmt.Println(filepaths)
+	} else if argument == "visual" {
 		// launch visualisation
 		fmt.Println("VISUALISE")
-	} else if command == "init" {
-		err = tigInit()
-		if err != nil {
-			panic(err)
+	} else if argument == "init" {
+		tigInit()
+	} else if argument == "group" {
+		// find argument at position 2
+		argument, err := getArgument(2)
+		check(err)
+		if argument == "add" {
+			name, err := getArgument(3)
+			check(err)
+			visibility := getFlags()
+			addGroup(name, visibility)
+			check(err)
+		} else if argument == "delete" {
+			name, err := getArgument(3)
+			check(err)
+			visibility := getFlags()
+			deleteGroup(name, visibility)
+			check(err)
 		}
-	} else if command == "group" {
-		command, err := getCommand(2)
-		if err != nil {
-			panic(err)
-		} else if command == "add" {
-			name, err := getCommand(3)
-			fmt.Printf(name)
-			err = addGroup(name)
-			if err != nil {
-				panic(err)
-			}
-		} else if command == "delete" {
-			name, err := getCommand(3)
-			err = deleteGroup(name)
-			if err != nil {
-				panic(err)
-			}
-		}
-	} else if command == "switch" {
-
+	} else if argument == "switch" {
+		// find argument at position 2
+		name, err := getArgument(2)
+		check(err)
+		visibility := getFlags()
+		switchGroup(name, visibility)
 	}
 }
