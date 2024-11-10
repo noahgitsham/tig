@@ -48,13 +48,12 @@
     <div class="flex-container" style="display: flex; flex-direction: row; justify-content: center; ">
         <div>
             <pre class="mermaid">
+                
 				{{.commitInfo}}
             </pre>
         </div>
         <div id="imageBox" class="image-box" style="visibility: hidden;" data-info="This is some extra information" >
-            {{ range .filenames }}
-            	<img src="/files/{{ . }}" alt="Image" width="300">
-        	{{ end }}
+            
 			<!-- <img src="https://via.placeholder.com/150" alt="Sample Image" > -->
         </div>
     </div>
@@ -134,9 +133,9 @@
                         // element.addEventListener('mouseleave', hideImageBox);
                         element.addEventListener('click', (event) => {
                         if (imageBox.style.visibility === 'hidden') {
-							showImageBox(event, {{ .logo }},name);  // Example image URL
+							showImageBox(event, "{{ .logo }}",name);  // Example image URL
                         } else if (imageBox.dataset.info!=name){
-							showImageBox(event, {{ .logo }},name); 
+							showImageBox(event, "{{ .logo }}",name); 
                         }
                         else {
                             hideImageBox();
@@ -162,11 +161,11 @@
                         //imageBox.style.left = `${rect.right + 10 + window.scrollX}px`;  // Position 10px to the right of the element
                         //imageBox.style.top = `${rect.top + window.scrollY}px`;
 
-                        // Display the image box
+                        //     git push --set-upstream origin postsubmissionattemptsDisplay the image box
                         imageBox.style.visibility = 'visible';
                         imageBox.dataset.info = name
                         console.log(imageBox.dataset.info);
-                        imageBox.src = name+".svg";
+                        imageBox.src = imageLink;
                     }
 
                     // Function to hide the image box
