@@ -1,5 +1,6 @@
 # Tig
 Tool designed to work alongside git.
+Aids developing process.
 
 ## Sources
 - Writing web applications: https://go.dev/doc/articles/wiki/
