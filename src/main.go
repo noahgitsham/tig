@@ -19,6 +19,7 @@ func main() {
 		addLinks(filepaths)
 	} else if argument == "visual" {
 		// launch visualisation
+		visualise()
 		fmt.Println("VISUALISE")
 	} else if argument == "init" {
 		tigInit()
