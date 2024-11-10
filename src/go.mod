@@ -2,7 +2,10 @@ module tig
 
 go 1.23.2
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-gonic/gin v1.10.0
+	github.com/spf13/pflag v1.0.5
+)
 
 require (
 	github.com/bytedance/sonic v1.12.4 // indirect
