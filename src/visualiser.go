@@ -217,7 +217,6 @@ func parseGitLog() (string, error) {
 		for index, stack := range stackList {
 			if slices.Contains(stack, commit) {
 				if stack[len(stack) - 1] == commit {
-<<<<<<< HEAD
 					outputString += "  branch b" + strconv.Itoa(index) + "\n"
 				}
 				outputString += "  checkout b" + strconv.Itoa(index) + "\n"
