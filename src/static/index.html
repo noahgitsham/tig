@@ -6,24 +6,65 @@
     <title>{{ .title }}jflkdajlkfdja</title>
     <!-- <link rel="stylesheet" href="/static/styles.css"> -->
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <style>
+        .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: red; /* Red background for the navbar */
+        padding: 15px 20px;
+        }
+        .logo {
+        margin: 0 auto; /* Centers the logo */
+        width: 100px;
+        height: 40px;
+        background-color: white; /* Placeholder background for logo */
+        text-align: center;
+        line-height: 40px;
+        font-weight: bold;
+        color: red;
+        border-radius: 5px;
+        }
+    </style>
     
 </head>
 <body>
+    <div class="navbar">
+
+      
+        <!-- Central logo placeholder -->
+        <div class="logo">
+            <img src="/home/sam/Documents/GitRepos/Hackathon/tig/src/media/e.jpg">
+        </div>
+      
+        
+      </div>
     <header>
-        <h1 id = "this">{{ .title }}</h1>
+        <h1 id = "this" style="text-align: center;">{{ .title }}</h1>
        
     </header>
     <main>
-        <p>{{ .content }}</p>
+        <p style="text-align: center;">{{ .content }}</p>
+        
         
     </main>
-    <div class="flex-container" style="display: flex; flex-direction: row;">
+    <div class="flex-container" style="display: flex; flex-direction: row; justify-content: center; ">
         <div>
             <pre class="mermaid">
-                {{.commitInfo}}
+                gitGraph BT:
+                commit
+                commit
+                branch develop
+                checkout develop
+                commit
+                commit
+                checkout main
+                merge develop
+                commit
+                commit
             </pre>
         </div>
-        <div id="imageBox" class="image-box" style="display: none;" data-info="This is some extra information" >
+        <div id="imageBox" class="image-box" style="visibility: hidden;" data-info="This is some extra information" >
             <img src="https://via.placeholder.com/150" alt="Sample Image" >
         </div>
     </div>
@@ -48,8 +89,10 @@
                 // Try to select the first element with class 'first'
                 
                 var nodeList = document.getElementsByClassName("commit");
+                //console.log(nodeList)
                 Array.from(nodeList).forEach(node => {
                  // Convert classList to array and log it
+                console.log(nodeList)
                 var classes = node.classList
                 
                 if (classes[1]=="commit-merge"){
@@ -82,10 +125,10 @@
                         
                         // element.addEventListener('mouseleave', hideImageBox);
                         element.addEventListener('click', (event) => {
-                        if (imageBox.style.display === 'none') {
-                            showImageBox(event, "none",name);  // Example image URL
+                        if (imageBox.style.visibility === 'hidden') {
+                            showImageBox(event, "hidden",name);  // Example image URL
                         } else if (imageBox.dataset.info!=name){
-                            showImageBox(event, "none",name); 
+                            showImageBox(event, "hidden",name); 
                         }
                         else {
                             hideImageBox();
@@ -112,7 +155,7 @@
                         //imageBox.style.top = `${rect.top + window.scrollY}px`;
 
                         // Display the image box
-                        imageBox.style.display = 'block';
+                        imageBox.style.visibility = 'visible';
                         imageBox.dataset.info = name
                         console.log(imageBox.dataset.info);
                         imageBox.src = imageLink;
@@ -120,7 +163,7 @@
 
                     // Function to hide the image box
                     function hideImageBox() {
-                        imageBox.style.display = 'none';
+                        imageBox.style.visibility = 'hidden';
                     }
                     // Add event listeners to each target element
                 }

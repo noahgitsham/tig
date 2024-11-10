@@ -14,6 +14,7 @@ import (
 func visualise() {
 	r := gin.Default()
 	r.Static("/static", "./static")
+	r.Static("/images", "./media")
 	r.LoadHTMLGlob("static/*")
 	r.GET("/", func(c *gin.Context) {
 		// c.JSON(200, gin.H{
