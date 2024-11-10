@@ -11,13 +11,6 @@ import (
 	"fmt"
 )
 
-func startServer() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-)
-
 func visualise() {
 	r := gin.Default()
 	r.Static("/static", "./static")
