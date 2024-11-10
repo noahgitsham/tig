@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"bufio"
 	"slices"
+	"strconv"
 )
 
 func startServer() {
@@ -177,7 +178,7 @@ func parseGitLog() (string, error) {
 			for _, parent := range commitStruct.mergeHashes {
 				// Right to left
 				for i, stack := range stackList[:index] {
-					if descendentOf(commitMap[commit], peek(stack)) {
+					if descendentOf(commitMap[parent], commitMap[peek(stack)]) {
 						// Swap
 						temp := stackList[index]
 						stackList[index] = stackList[i]
@@ -189,6 +190,39 @@ func parseGitLog() (string, error) {
 		}
 	}
 
+
+	// BIGGEST MONEY EVER
+	commits, err = getCommitsChronological()
+	if (err != nil) {
+		return "", err
+	}
+	outputString := "    gitGraph\n"
+	for _, commit := range commits {
+		for index, stack := range stackList {
+			if slices.Contains(stack, commit) {
+				if stack[len(stack) - 1] == commit {
+					outputString += "        branch b" + strconv.Itoa(index) + "\n"
+				}
+				outputString += "        checkout b" + strconv.Itoa(index) + "\n"
+				if len(commitMap[commit].mergeHashes) > 0 {
+					for _, mergeCommit := range commitMap[commit].mergeHashes {
+						branch := "b"
+						for index, stack := range stackList {
+							if slices.Contains(stack, mergeCommit) {
+								branch += strconv.Itoa(index)
+								break
+							}
+						}
+						outputString += "        merge id: \"" + commit + "\"" + branch + "\n"
+					}
+				} else {
+					outputString += "        commit id: \"" + commit + "\"\n"
+				}
+			}
+		}
+	}
+
+
 	// var parsedOutput string
-	return "hello", nil
+	return outputString, nil
 }
