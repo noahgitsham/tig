@@ -27,7 +27,8 @@ func dirNotExists(path string) bool {
 }
 
 // Finds base directory ()
-func findGitDir(path string) string {
+func findGitDir() string {
+	path := getCurrentDir()
 	for dirNotExists(filepath.Join(path, ".git")) && path != "/" {
 		path = filepath.Dir(path)
 	}
@@ -42,50 +43,51 @@ func getHeadCommit() string {
 }
 
 func tigInit() {
-	err := os.Mkdir(".tig", 0755)
+
+	err := os.Mkdir(filepath.Join(findGitDir(), ".tig"), 0755)
 	check(err)
-	err = os.Mkdir(".tig/public", 0755)
+	err = os.Mkdir(filepath.Join(findGitDir(), ".tig/public"), 0755)
 	check(err)	
-	err = os.Mkdir(".tig/private", 0755)
+	err = os.Mkdir(filepath.Join(findGitDir(), ".tig/private"), 0755)
 	check(err)	
-	file, err := os.Create(".tig/public/default")
+	file, err := os.Create(filepath.Join(findGitDir(), ".tig/public/default"))
 	check(err)		
 	file.Close()
-	file, err = os.Create(".tig/HEAD")
+	file, err = os.Create(filepath.Join(findGitDir(), ".tig/HEAD"))
 	check(err)
-	_, err = file.WriteString(".tig/public/default")
+	_, err = file.WriteString(filepath.Join(findGitDir(), ".tig/public/default"))
 	check(err)
 	file.Close()
 }
 
 func addGroup(name string, visibility string) {
-	file, err := os.Create(".tig/"+visibility+"/"+name)
+	file, err := os.Create(filepath.Join(".tig", visibility, "/", name))
 	check(err)
 	file.Close()
 }
 
 func deleteGroup(name string, visibility string) {
-	err := os.Remove((".tig/"+visibility+"/" + name))
+	err := os.Remove(filepath.Join(".tig", visibility, name))
 	check(err)
 }
 
 func switchGroup(name string, visibility string) {
-	file, err := os.Create(".tig/HEAD")
+	file, err := os.Create(filepath.Join(findGitDir(), ".tig/HEAD"))
 	check(err)
-	_, err = file.WriteString(".tig/"+visibility+"/"+name)
+	_, err = file.WriteString(filepath.Join(findGitDir(), ".tig", visibility, name))
 	check(err)
 	file.Close()
 }
 
 func addLinks(filepaths []string) {
 	// find the filepath stored in git HEAD
-	filepathBytes, err := os.ReadFile(".git/HEAD")
+	filepathBytes, err := os.ReadFile(filepath.Join(findGitDir(), ".git/HEAD"))
 	check(err)
 	// convert from []byte to string
-	filepath := string(filepathBytes)
+	fp := string(filepathBytes)
 
 	// find the hash at found filepath
-	extendedFilepath := ".git/"+strings.Split(filepath, " ")[1]
+	extendedFilepath := filepath.Join(findGitDir(), ".git", strings.Split(fp, " ")[1])
 	extendedFilepath = strings.TrimSpace(extendedFilepath)
 	hashBytes, err := os.ReadFile(extendedFilepath)
     check(err)
@@ -94,13 +96,13 @@ func addLinks(filepaths []string) {
     hash = strings.TrimSpace(hash)
 
 	// find the filepath stored in tig HEAD
-	filepathBytes, err = os.ReadFile(".tig/HEAD")
+	filepathBytes, err = os.ReadFile(filepath.Join(findGitDir(), ".tig/HEAD"))
 	check(err)
 	// convert from []byte to string
-	filepath = string(filepathBytes)
+	fp = string(filepathBytes)
 	
 	// find the file contents at found filepath
-	fileContentBytes, err := os.ReadFile(filepath)
+	fileContentBytes, err := os.ReadFile(fp)
 	check(err)
 	// convert from []byte to string
 	fileContent := string(fileContentBytes)
@@ -129,7 +131,7 @@ func addLinks(filepaths []string) {
 
 	// write commit array back to file
 	fileContent = strings.Join(links, "\n")
-	file, err := os.Create(filepath)
+	file, err := os.Create(fp)
 	check(err)
 	_, err = file.WriteString(fileContent)
 	check(err)
@@ -140,7 +142,7 @@ func addLinks(filepaths []string) {
 // filespaths from a given hash
 func hashToFilepaths(hash string) ([]string, error) {
 	// find the filepath stored in tig HEAD
-	filepathBytes, err := os.ReadFile(".tig/HEAD")
+	filepathBytes, err := os.ReadFile(filepath.Join(findGitDir(), ".tig/HEAD"))
     check(err)
     // convert from []byte to string
 	filepath := string(filepathBytes)
