@@ -1,3 +1,4 @@
+![Tig Logo](./logo.svg)
 # Tig
 Tool designed to work alongside git.
 
