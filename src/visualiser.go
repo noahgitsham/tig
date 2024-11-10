@@ -8,26 +8,35 @@ import (
 	"slices"
 	"strconv"
 	"net/http"
-	"fmt"
 )
 
 func visualise() {
 	r := gin.Default()
 	r.Static("/static", "./static")
-	r.Static("/images", "./media")
+	r.Static("/files", ".")
 	r.LoadHTMLGlob("static/*")
+	
 	r.GET("/", func(c *gin.Context) {
 		// c.JSON(200, gin.H{
 		// 	"message": "pong",
 		// })
 		tree, err := parseGitLog()
 		check(err)
-		fmt.Println(tree)
+
+		//files, err := ioutil.ReadDir("./files")
+		//check(err)
+
+		logo := "logo.svg"
+
+		filenames := []string{}
+		filenames = append(filenames, "logo.svg")
 		
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title":   "Tig",
 			"content": "visualise your repository",
 			"commitInfo":tree,
+			"logo":logo,
+			"filenames":filenames,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080

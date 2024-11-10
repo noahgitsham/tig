@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .title }}jflkdajlkfdja</title>
+    <title>{{ .title }}</title>
     <!-- <link rel="stylesheet" href="/static/styles.css"> -->
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <style>
@@ -18,23 +18,20 @@
         margin: 0 auto; /* Centers the logo */
         width: 100px;
         height: 40px;
-        background-color: white; /* Placeholder background for logo */
         text-align: center;
         line-height: 40px;
         font-weight: bold;
         color: red;
         border-radius: 5px;
         }
-    </style>
-    
+    </style>    
 </head>
 <body>
     <div class="navbar">
-
-      
+ 
         <!-- Central logo placeholder -->
         <div class="logo">
-            <img src="/home/sam/Documents/GitRepos/Hackathon/tig/src/media/e.jpg">
+            <img src="/files/{{ .logo }}" alt="Logo" width="50">
         </div>
       
         
@@ -55,9 +52,30 @@
             </pre>
         </div>
         <div id="imageBox" class="image-box" style="visibility: hidden;" data-info="This is some extra information" >
-            <img src="https://via.placeholder.com/150" alt="Sample Image" >
+            {{ range .filenames }}
+            	<img src="/files/{{ . }}" alt="Image" width="300">
+        	{{ end }}
+			<!-- <img src="https://via.placeholder.com/150" alt="Sample Image" > -->
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
             mermaid.initialize({ startOnLoad: true });
@@ -79,7 +97,8 @@
                 // Try to select the first element with class 'first'
                 
                 var nodeList = document.getElementsByClassName("commit");
-                //console.log(nodeList)
+            	const imageBox = document.getElementById('imageBox');
+				//console.log(nodeList)
                 Array.from(nodeList).forEach(node => {
                  // Convert classList to array and log it
                 console.log(nodeList)
@@ -93,7 +112,6 @@
                 });
                 function trackNode(name){
                     var element = document.getElementsByClassName(name)[0];
-                    const imageBox = document.getElementById('imageBox');
                     
                     // Check if element exists
                     if (element) {
@@ -116,9 +134,9 @@
                         // element.addEventListener('mouseleave', hideImageBox);
                         element.addEventListener('click', (event) => {
                         if (imageBox.style.visibility === 'hidden') {
-                            showImageBox(event, "hidden",name);  // Example image URL
+							showImageBox(event, {{ .logo }},name);  // Example image URL
                         } else if (imageBox.dataset.info!=name){
-                            showImageBox(event, "hidden",name); 
+							showImageBox(event, {{ .logo }},name); 
                         }
                         else {
                             hideImageBox();
