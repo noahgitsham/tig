@@ -6,24 +6,6 @@
     <title>{{ .title }}jflkdajlkfdja</title>
     <!-- <link rel="stylesheet" href="/static/styles.css"> -->
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
-    
-</head>
-<body>
-    <header>
-        <h1 id = "this">{{ .title }}</h1>
-       
-    </header>
-    <main>
-        <p>{{ .content }}</p>
-        
-    </main>
-    <div class="flex-container" style="display: flex; flex-direction: row;">
-        <div>
-            <pre class="mermaid">
-{{.commitInfo}}
-            </pre>
-        </div>
-        <div id="imageBox" class="image-box" style="display: none;" data-info="This is some extra information" >
     <style>
         .navbar {
         display: flex;
@@ -69,17 +51,7 @@
     <div class="flex-container" style="display: flex; flex-direction: row; justify-content: center; ">
         <div>
             <pre class="mermaid">
-                gitGraph BT:
-                commit
-                commit
-                branch develop
-                checkout develop
-                commit
-                commit
-                checkout main
-                merge develop
-                commit
-                commit
+				{{.commitInfo}}
             </pre>
         </div>
         <div id="imageBox" class="image-box" style="visibility: hidden;" data-info="This is some extra information" >
@@ -89,6 +61,7 @@
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
             mermaid.initialize({ startOnLoad: true });
+        
             // Define the sleep function
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
@@ -125,6 +98,7 @@
                     // Check if element exists
                     if (element) {
                         
+                        
                         // Add hover event listener
                         element.addEventListener('mouseover', () => {
                             // Check if the element is an SVG element (for using 'fill' property)
@@ -155,6 +129,7 @@
                     } else {
                         console.log("No element with the class 'first' found.");
                     }
+            
                     // Sleep for 1 more second
                     console.log("3 seconds later");
                     // Get all the elements with class 'targetElement'

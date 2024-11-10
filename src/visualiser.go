@@ -211,7 +211,7 @@ func parseGitLog() (string, error) {
 	if (err != nil) {
 		return "", err
 	}
-	outputString := "gitGraph\n"
+	outputString := "gitGraph BT:\n"
 	// outputString += "  commit\n"
 	for _, commit := range commits {
 		for index, stack := range stackList {
