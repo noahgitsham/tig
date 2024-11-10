@@ -20,6 +20,7 @@ func main() {
 		}
 	} else if command == "visual" {
 		// launch visualisation
-		fmt.Println("VISUALISE")
+		visualise()
+		//fmt.Println("VISUALISE")
 	}
 }
