@@ -1,0 +1,119 @@
+# Final pseudocode
+
+list<stack<commits>> branchStacks
+
+# DO PASS TO GET descendantOf
+# DO PASS TO GET children
+
+for commitmessage in reverseCommitLog: # In reverse chronological order
+
+	put commit in stack of first/last child # TODO make smart
+
+	if isMergeCommit(commit):
+		for parent in commit.mergedParent:
+			for stack left of stackOf(commit):
+				if stack.peek() is descendantOf(parent): # Merged parent is any hash right of parent
+					swap(stackOf(commit), stackOf(parent))
+					break
+	
+
+	
+
+
+
+
+
+
+
+
+
+for commitmessage in commitstream: # In chronological order
+	if isMergeCommit(commit):
+		commit.parent = commit.parent.branch
+		parsed.addline("checkout " + commit.branch)
+		parsed.addline("merge " + commit.mergedparent.branch + " id: " + commit.hash) # commit.mergedparent = second hash in merge commit, commit.parent = first
+	else:
+		if isBranchCommit(commit): 
+			commit.branch = parsed from end of log line
+			parsed.addline("branch" + commit.branch)
+		else:
+			commit.branch = commit.parent.branch
+	
+		parsed.addline("checkout " + commit.branch)
+		parsed.addline("commit id:" + commit.hash + extra info) # Add extra info: git tag etc
+
+
+
+
+
+
+
+
+# MEGA FUCKED
+
+string parsed
+
+for commitmessage in commitstream: # In chronological order
+	if isMergeCommit(commit):
+		commit.parent = commit.parent.branch
+		parsed.addline("checkout " + commit.branch)
+		parsed.addline("merge " + commit.mergedparent.branch + " id: " + commit.hash) # commit.mergedparent = second hash in merge commit, commit.parent = first
+	else:
+		if isBranchCommit(commit): 
+			commit.branch = parsed from end of log line
+			parsed.addline("branch" + commit.branch)
+		else:
+			commit.branch = commit.parent.branch
+	
+		parsed.addline("checkout " + commit.branch)
+		parsed.addline("commit id:" + commit.hash + extra info) # Add extra info: git tag etc
+
+		
+# Remaining stucture stacks are unmerged branches at the end
+# Can check in another way the branches for these to render branch names
+
+
+
+
+
+
+
+
+# OLD
+
+
+list<stack<commits>> branchStacks
+list<bool> branchInUse
+
+hashmap<hash, index> branchmap
+
+string parsed
+
+for commitmessage in commitstream: # In chronological order
+	if isMergeCommit(commit):
+		commit.parent = commit.parent.branch
+		parsed.addline("checkout " + commit.branch)
+		# commit.mergedparent = second hash in merge commit, commit.parent = first
+		parsed.addline("merge " + commit.mergedparent.branch + " id: " + commit.hash)
+	else:
+		if isBranchCommit(commit): # commit.branch parsed from git info
+			int i
+			while (structure[i] != nil):
+				i++
+			structure[i] = new stack
+			structure[i].push(commit)
+			branchmap.add(commit, i)
+			parsed.addline("branch develop")
+		else:
+			commit.branch = commit.parent.branch
+			structure[branchmap[commit.parent.branch]].push(commit)
+	
+		parsed.addline("checkout " + commit.branch)
+		parsed.addline("commit id:" + commit.hash + extra info) # Add extra info: git tag etc
+	
+
+		
+# Remaining stucture stacks are unmerged branches at the end
+# Can check in another way the branches for these to render branch names
+
+list<stack<commits>> unnamedBranches
