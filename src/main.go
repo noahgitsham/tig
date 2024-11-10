@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 )
 
 func main() {
@@ -19,8 +19,8 @@ func main() {
 		addLinks(filepaths)
 	} else if argument == "visual" {
 		// launch visualisation
+		openInBrowser("http://localhost:8080")
 		visualise()
-		fmt.Println("VISUALISE")
 	} else if argument == "init" {
 		tigInit()
 	} else if argument == "group" {
