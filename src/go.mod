@@ -2,7 +2,10 @@ module tig
 
 go 1.23.2
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-gonic/gin v1.10.0
+	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
+)
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
