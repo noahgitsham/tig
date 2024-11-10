@@ -214,7 +214,7 @@ func parseGitLog() (string, error) {
 		return "", err
 	}
 	outputString := "gitGraph\n"
-	outputString += "  commit\n"
+	// outputString += "  commit\n"
 	for _, commit := range commits {
 		for index, stack := range stackList {
 			if slices.Contains(stack, commit) {
