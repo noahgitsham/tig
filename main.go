@@ -43,4 +43,8 @@ func main() {
 		visibility := getFlags()
 		switchGroup(name, visibility)
 	}
+
+	//files, err := hashToFilepaths("31bb6d3e5495c5ba1638b32a788b012920272355")
+	//check(err)
+	//fmt.Println(files)
 }

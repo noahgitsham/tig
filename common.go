@@ -133,3 +133,30 @@ func addLinks(filepaths []string) {
 	check(err)
 	file.Close()
 }
+
+// function to return all associated
+// filespaths from a given hash
+func hashToFilepaths(hash string) ([]string, error) {
+	// find the filepath stored in tig HEAD
+	filepathBytes, err := os.ReadFile(".tig/HEAD")
+    check(err)
+    // convert from []byte to string
+	filepath := string(filepathBytes)
+
+    // find the file contents at found filepath
+    fileContentBytes, err := os.ReadFile(filepath)
+    check(err)
+    // convert from []byte to string
+    fileContent := string(fileContentBytes)
+
+	// find the line with the correct hash
+	lines := strings.Split(fileContent, "\n")
+	for _, line := range lines {
+		entries := strings.Split(line, " ")
+		if entries[0] == hash {
+			return entries[1:], nil
+		}
+	}
+
+	return nil, errors.New("Hash not found")
+}
