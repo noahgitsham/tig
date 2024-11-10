@@ -8,13 +8,14 @@ import (
 	"slices"
 	"strconv"
 	"net/http"
+	"html/template"
 )
 
 func visualise() {
 	r := gin.Default()
-	r.Static("/static", "./static")
-	r.Static("/files", ".")
-	r.LoadHTMLGlob("static/*")
+	r.Static("/static", "./src/static")
+	r.Static("/files", "./src")
+	r.LoadHTMLGlob("src/static/*")
 	
 	r.GET("/", func(c *gin.Context) {
 		// c.JSON(200, gin.H{
@@ -31,7 +32,7 @@ func visualise() {
 		content := fileContents()
 
 		filenames := []string{}
-		filenames = append(filenames, "logo.svg")
+		filenames = append(filenames, "./src/logo.svg")
 
 		filehash := make(map[string]string)
 		for _, line := range content{
@@ -43,7 +44,7 @@ func visualise() {
 		}
 		html := ""
 		for file, hash := range filehash { 
-			html += "<img src='/files/" + file + "' class='" + hash + "'>\n"
+			html += "<img src=\"/files/" + file + "\" class=\"" + hash + "\" width=60%><br><br>"
 		}
 
 
@@ -52,7 +53,7 @@ func visualise() {
 			"content": "visualise your repository",
 			"commitInfo":tree,
 			"logo":logo,
-			"images":html,
+			"images":template.HTML(html),
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080

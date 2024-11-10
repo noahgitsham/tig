@@ -168,7 +168,7 @@ func hashToFilepaths(hash string) ([]string, error) {
 // returns file contents
 func fileContents() []string {
 	// find the filepath stored in tig HEAD
-	filepathBytes, err := os.ReadFile(".tig/HEAD")
+	filepathBytes, err := os.ReadFile(filepath.Join(findGitDir(), ".tig/HEAD"))
     check(err)
     // convert from []byte to string
 	filepath := string(filepathBytes)
