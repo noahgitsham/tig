@@ -163,6 +163,23 @@ func hashToFilepaths(hash string) ([]string, error) {
 	return nil, errors.New("Hash not found")
 }
 
+// returns file contents
+func fileContents() []string {
+	// find the filepath stored in tig HEAD
+	filepathBytes, err := os.ReadFile(".tig/HEAD")
+    check(err)
+    // convert from []byte to string
+	filepath := string(filepathBytes)
+    // find the file contents at found filepath
+    fileContentBytes, err := os.ReadFile(filepath)
+    check(err)
+    // convert from []byte to string
+    fileContent := string(fileContentBytes)
+	// find the line with the correct hash
+	lines := strings.Split(fileContent, "\n")
+	return lines
+	}
+
 // from https://gist.github.com/sevkin/9798d67b2cb9d07cb05f89f14ba682f8
 func openInBrowser(link string) error {
     var cmd string
@@ -178,5 +195,4 @@ func openInBrowser(link string) error {
         cmd = "xdg-open"
     }
     args = append(args, link)
-    return exec.Command(cmd, args...).Start()
-}
+    return exec.Command(cmd, args...).Start()}

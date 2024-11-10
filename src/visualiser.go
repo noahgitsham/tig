@@ -28,15 +28,31 @@ func visualise() {
 
 		logo := "logo.svg"
 
+		content := fileContents()
+
 		filenames := []string{}
 		filenames = append(filenames, "logo.svg")
-		
+
+		filehash := make(map[string]string)
+		for _, line := range content{
+			splitLine := strings.Split(line, " ")
+			hash := splitLine[0]
+			for _, file := range splitLine[1:] {
+				filehash[file] = hash
+			}
+		}
+		html := ""
+		for file, hash := range filehash { 
+			html += "<img src='/files/" + file + "' class='" + hash + "'>\n"
+		}
+
+
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title":   "Tig",
 			"content": "visualise your repository",
 			"commitInfo":tree,
 			"logo":logo,
-			"filenames":filenames,
+			"images":html,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080

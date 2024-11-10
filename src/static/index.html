@@ -52,9 +52,7 @@
             </pre>
         </div>
         <div id="imageBox" class="image-box" style="visibility: hidden;" data-info="This is some extra information" >
-            {{ range .filenames }}
-            	<img src="/files/{{ . }}" alt="Image" width="300">
-        	{{ end }}
+			{{.images}}
 			<!-- <img src="https://via.placeholder.com/150" alt="Sample Image" > -->
         </div>
     </div>
