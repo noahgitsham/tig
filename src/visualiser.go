@@ -103,9 +103,33 @@ func getCommitsChronological() ([]string, error) {
 	return commits, nil
 }
 
+func descendentOf(child commit, parent commit) bool {
+
+	commitMap, err := parseLogs()
+	if (err != nil) {
+		panic(err)
+	}
+
+	if parent.children == nil {
+		return false
+	}
+	if parent.hash == child.hash {
+		return true
+	}
+	for _, childToCheck := range parent.children {
+		found := descendentOf(child, commitMap[childToCheck])
+		if found {
+			return true
+		}
+	}
+	return false
+}
+
+func peek(stack []string) string {
+	return stack[len(stack) - 1]
+}
+
 func parseGitLog() (string, error) {
-	// Hashmap for commit hash -> list of children
-	children := make(map[string][]string)
 	commits, err := getCommitsReverseChronological()
 	if (err != nil) {
 		return "", err
@@ -114,16 +138,56 @@ func parseGitLog() (string, error) {
 	if (err != nil) {
 		return "", err
 	}
+	// Iterate over commits, and add them as child to their parent nodes
 	for _, commit := range commits {
-		parent := commitMap[commit]
-		commitMap[parent.parentHash].children = append(commitMap[parent.parentHash].children, commit)
+		child := commitMap[commit]
+		temp := commitMap[child.parentHash]
+		temp.children = append(temp.children, commit)
+		commitMap[child.parentHash] = temp
 		for _, hash := range commitMap[commit].mergeHashes {
-
+			temp := commitMap[child.parentHash]
+			temp.children = append(temp.children, hash)
+			commitMap[child.parentHash] = temp
 		}
 	}
 
-	// for line in 
-	
+	// BIG MONEY
+	var stackList [][]string
+	for _, commit := range commits {
+		commitStruct := commitMap[commit]
+
+		inserted := false
+		var index int
+		for i := 0; i < len(stackList); i++ {
+			if stackList[i] != nil && slices.Contains(commitMap[peek(stackList[i])].children, commit) {
+				newStack := append(stackList[i], commit)
+				stackList[i] = newStack
+				inserted = true
+				index = i
+				break
+			}
+		}
+		if !inserted {
+			stackList = append(stackList, []string{commit})
+			index = len(stackList) - 1
+		}
+
+
+		if commitStruct.mergeHashes != nil {
+			for _, parent := range commitStruct.mergeHashes {
+				// Right to left
+				for i, stack := range stackList[:index] {
+					if descendentOf(commitMap[commit], peek(stack)) {
+						// Swap
+						temp := stackList[index]
+						stackList[index] = stackList[i]
+						stackList[i] = temp
+						break
+					}
+				}
+			}
+		}
+	}
 
 	// var parsedOutput string
 	return "hello", nil
