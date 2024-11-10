@@ -26,7 +26,7 @@ func visualise() {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title":   "Tig",
 			"content": "visualise your repository",
-			"commitInfo":tree,
+			"commitInfo": tree,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
@@ -39,7 +39,7 @@ func visualise() {
 ///////////////////////////////
 
 func getGitLog() ([]string, error) {
-	out, err := exec.Command("git", "log", "--all", "--author-date-order", "--pretty=format:\"%h,%p,%s,%D\"").Output()
+	out, err := exec.Command("git", "log", "--all", "--author-date-order", "--pretty=format:%h,%p,%s,%D").Output()
 	if (err != nil) {
 		return nil, err
 	}
@@ -68,6 +68,7 @@ func parseLogLine(line string) (hash string, parentHash string, mergeHashes []st
 	parents := strings.Split(split[1], " ")
 	if len(parents) >= 1 {
 		parentHash = parents[0]
+		mergeHashes = []string {}
 	}
 	if len(parents) > 1 {
 		mergeHashes = parents[1:]
@@ -153,6 +154,7 @@ func parseGitLog() (string, error) {
 		return "", err
 	}
 	// Iterate over commits, and add them as child to their parent nodes
+	// SEEMS TO WORK
 	for _, commit := range commits {
 		child := commitMap[commit]
 		temp := commitMap[child.parentHash]
@@ -166,14 +168,14 @@ func parseGitLog() (string, error) {
 	}
 
 	// BIG MONEY
-	var stackList [][]string
+	stackList := [][]string{}
 	for _, commit := range commits {
 		commitStruct := commitMap[commit]
 
 		inserted := false
 		var index int
 		for i := 0; i < len(stackList); i++ {
-			if stackList[i] != nil && slices.Contains(commitMap[peek(stackList[i])].children, commit) {
+			if slices.Contains(commitStruct.children, peek(stackList[i])) {
 				newStack := append(stackList[i], commit)
 				stackList[i] = newStack
 				inserted = true
@@ -187,7 +189,7 @@ func parseGitLog() (string, error) {
 		}
 
 
-		if commitStruct.mergeHashes != nil {
+		if len(commitStruct.mergeHashes) != 0 {
 			for _, parent := range commitStruct.mergeHashes {
 				// Right to left
 				for i, stack := range stackList[:index] {
@@ -203,20 +205,23 @@ func parseGitLog() (string, error) {
 		}
 	}
 
+	fmt.Println(len(stackList))
+
 
 	// BIGGEST MONEY EVER
 	commits, err = getCommitsChronological()
 	if (err != nil) {
 		return "", err
 	}
-	outputString := "    gitGraph\n"
+	outputString := "gitGraph\n"
+	outputString += "  commit\n"
 	for _, commit := range commits {
 		for index, stack := range stackList {
 			if slices.Contains(stack, commit) {
 				if stack[len(stack) - 1] == commit {
-					outputString += "        branch b" + strconv.Itoa(index) + "\n"
+					outputString += "  branch b" + strconv.Itoa(index) + "\n"
 				}
-				outputString += "        checkout b" + strconv.Itoa(index) + "\n"
+				outputString += "  checkout b" + strconv.Itoa(index) + "\n"
 				if len(commitMap[commit].mergeHashes) > 0 {
 					for _, mergeCommit := range commitMap[commit].mergeHashes {
 						branch := "b"
@@ -226,15 +231,14 @@ func parseGitLog() (string, error) {
 								break
 							}
 						}
-						outputString += "        merge id: \"" + commit + "\"" + branch + "\n"
+						outputString += "  merge " + branch  + " id: \"" + commit + "\"\n"
 					}
 				} else {
-					outputString += "        commit id: \"" + commit + "\"\n"
+					outputString += "  commit id: \"" + commit + "\"\n"
 				}
 			}
 		}
 	}
-
 
 	// var parsedOutput string
 	return outputString, nil

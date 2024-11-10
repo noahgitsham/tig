@@ -5,6 +5,9 @@ import (
 )
 
 func main() {
+	// tree, err := parseGitLog()
+	// check(err)
+	// fmt.Println(tree)
 	// find argument at position 1
 	argument, err := getArgument(1)
 	check(err)

@@ -7,7 +7,7 @@
 
   outputs = { self, nixpkgs }: let 
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    common-deps = with pkgs; [ libcap go gcc ];
+    common-deps = with pkgs; [ libcap go gcc gdb gdbgui delve ];
   in {
 
     devShell.x86_64-linux = pkgs.mkShell {
